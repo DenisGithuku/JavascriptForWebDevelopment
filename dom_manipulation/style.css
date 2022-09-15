@@ -1,0 +1,39 @@
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+form {
+    padding: 50px;
+    display: flex;
+    flex-flow: column wrap;
+    border: 1px solid aliceblue;
+    border-radius: 8px;
+}
+
+.email-input {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.password-input {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px
+}

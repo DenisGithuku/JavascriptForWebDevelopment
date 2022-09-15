@@ -1,0 +1,143 @@
+body {
+    margin: 0;
+    background-color: aliceblue;
+}
+
+.nav {
+    padding: 20px;
+    display: inline-flex;
+    flex-flow: row wrap;
+    gap: 20px;
+}
+
+.wrapper {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+}
+
+.main-container {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 20px;
+}
+
+.main-section {
+    order: 2;
+    display: flex;
+    flex-flow: row wrap;
+    border: none;
+    border-radius: 16px;
+    background-color: white;
+    margin: 20px;
+    padding: 20px;
+}
+
+.account-details {
+    order: 1;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    background-color: white;
+    border: none;
+    border-radius: 16px;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+.post {
+    border-bottom: 1px solid aliceblue;
+    padding: 20px
+}
+
+.read-more-btn {
+    padding: 10px 20px;
+    border-radius: 32px;
+    border: 2px solid aliceblue;
+    background-color: transparent;
+    color: rgb(36, 61, 83);
+}
+
+#aside1 {
+    order: 1
+}
+#aside2 {
+    order: 3
+}
+
+.read-more-btn:hover {
+    background-color: rgb(36, 61, 83);
+    color: white;
+    border: none;
+}
+
+.account-btn {
+    padding: 10px 20px;
+    border-radius: 32px;
+    border: 2px solid aliceblue;
+    background-color: transparent;
+    color: rgb(36, 61, 83);
+    margin: 10px
+}
+
+.account-btn:hover {
+    background-color: rgb(36, 61, 83);
+    color: white;
+    border: none;
+}
+
+.post-description {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.post-title {
+    color: rgba(0, 0, 0, 0.871);
+}
+
+footer {
+    background-color: rgb(4, 64, 64);
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    padding: 30px;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+footer li a {
+    color: white;
+    text-decoration: none;
+}
+
+footer #email-input {
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+}
+
+.checkbox {
+    border-radius: 4px;
+    border: none;
+}
+
+.email-input-section {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.newsletter-signup {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    color: white
+}
+
+.important-links {
+    display: flex;
+    margin: 0;
+}
