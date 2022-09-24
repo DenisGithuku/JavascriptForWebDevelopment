@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TodoIst</title>
+    <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="section-nav">
+        <h3 class="nav-header">TodoIst</h3>
+        <button class="show-create-todos-modal-btn">Add Todo &plus;</button>
+      </div>
+      <div class="todos-container">
+        <div class="section-todo-list">
+          <h3 class="section-todo-list-header">All your todos in one place</h3>
+          <div class="section-upcoming-todos hidden">
+          <span class="upcoming-todos-header">Upcoming</span>
+          <ul class="active-todos"></ul>
+          </div>
+          <div class="section-completed-todos hidden">
+          <span class="completed-todos-header">Completed</span>
+          <ul class="completed-todos"></ul>
+          </div>
+        </div>
+        <span class="no-todos-status-text">There are not todos available. Click on the add todos button to add them.</span>
+          </span>
+      <div class="modal-wrapper hidden">
+        <div class="modal">
+          <div class="modal-head">
+            <h4 class="add-todo">Add to Todos</h4>
+            <i class = "cross-icon">&times;</i>
+          </div>
+          <div class="modal-body">
+            <div class="modal-content">
+                <input
+                  type="text"
+                  class="description-input"
+                  placeholder="Enter todo description"
+                />
+                <input type="date" placeholder = "Enter todo date" class="todo-time-input">
+                <button class="add-todo-btn">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="error-wrapper">
+      <div class="error-container hidden">
+        <span class="error-message">Test</span>
+      </div>
+      </div>
+      <div class="overlay hidden"></div>
+      </div>
+    
+    <script src="./js/todos.js"></script>
+  </body>
+</html>
