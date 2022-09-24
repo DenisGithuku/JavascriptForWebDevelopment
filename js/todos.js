@@ -103,7 +103,7 @@ const showErrorMessage = () => {
   }
   setTimeout(() => {
     errorContainer.classList.add("hidden");
-  }, 2000);
+  }, 3000);
 };
 
 document
@@ -119,7 +119,7 @@ const addTodos = () => {
     description.length <= 0 ||
     document.querySelector(".todo-time-input").value <= 0
   ) {
-    errorMessage.textContent = "Invalid input";
+    errorMessage.textContent = "Todo cannot be empty.";
     showErrorMessage();
     return false;
   } else if (description.length <= 10) {
