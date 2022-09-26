@@ -1,18 +1,15 @@
 const completed_todos = [];
 const active_todo_list = document.querySelector(".active-todos");
-const completed_todo_list = document.querySelector(".completed-todos");
+// const completed_todo_list = document.querySelector(".completed-todos");
 const modal = document.querySelector(".modal-wrapper");
 const overlay = document.querySelector(".overlay");
-const addTodosBtn = document.querySelector(".add-todo-btn");
+const addTodoBtn = document.querySelector(".add-todo-btn");
 const errorContainer = document.querySelector(".error-container");
-const active_todos = [
-  // {
-  //   id: 0,
-  //   name: "Go to the shop",
-  //   time: new Date(Date.now()).getDate(),
-  //   active: true,
-  // },
-];
+const status_text = document.querySelector(".todos-status-text");
+const upcomingTodosStatusText = document.querySelector(
+  ".no-active-todos-status"
+);
+// const completedTodos = document.querySelector(".section-completed-todos");
 
 const createTodo = (todo) => {
   let todo_title = document.createElement("span");
@@ -25,42 +22,35 @@ const createTodo = (todo) => {
   todo_completed.type = "checkbox";
   todo_completed.checked = !todo.active;
 
+  let cross_icon = document.createElement("span");
+  cross_icon.innerHTML = "&Cross;";
+  cross_icon.setAttribute("id", "clear_todo");
+
   let todo_card = document.createElement("div");
   todo_card.classList.add("todo-card");
+  todo_card.appendChild(todo_completed);
   todo_card.appendChild(todo_title);
   todo_card.appendChild(todo_date);
-  todo_card.appendChild(todo_completed);
+  todo_card.appendChild(cross_icon);
   let todo_element = document.createElement("li");
   todo_element.appendChild(todo_card);
+  todo_element.animate(
+    [
+      {
+        transform: "translateY(100%)",
+      },
+
+      {
+        transform: "translateY(0%)",
+      },
+    ],
+    { duration: 400 }
+  );
   active_todo_list.appendChild(todo_element);
+  active_todo_list.classList.remove("hidden");
+  upcomingTodosStatusText.classList.add("hidden");
+  status_text.classList.add("hidden");
 };
-
-const refreshTodos = () => {
-  if (active_todos.length > 0) {
-    document.querySelector(".no-todos-status-text").classList.add("hidden");
-    document
-      .querySelector(".section-upcoming-todos")
-      .classList.remove("hidden");
-
-    active_todos
-      .filter((todos) => todos.active === true)
-      .forEach((todo) => {
-        createTodo(todo);
-      });
-  }
-};
-
-refreshTodos();
-
-// window.addEventListener("load", () => {
-//   if (active_todos.length > 0) {
-//     document
-//       .querySelector(".section-upcoming-todos")
-//       .classList.remove("hidden");
-//   } else {
-//     console.log("There are no todos");
-//   }
-// });
 
 const showModal = () => {
   document.getElementsByClassName("description-input")[0].value = "";
@@ -110,7 +100,7 @@ document
   .querySelector(".show-create-todos-modal-btn")
   .addEventListener("click", showModal);
 
-const addTodos = () => {
+const addTodo = () => {
   const description = document.querySelector(".description-input").value;
   const date = new Date(document.querySelector(".todo-time-input").value);
   const errorMessage = document.querySelector(".error-message");
@@ -127,13 +117,10 @@ const addTodos = () => {
     showErrorMessage();
     return false;
   } else if (date.getDate() < new Date(Date.now()).getDate()) {
-    // console.log(new Date(Date.now()).getDate());
     errorMessage.textContent = "Please choose a valid date";
     showErrorMessage();
     return false;
   } else {
-    // console.log("All good");
-    // console.log(`${date.toDateString().split(" ")[1]} ${date.getDate()}`);
     let formattedDate;
     if (date.getDate() === new Date(Date.now()).getDate()) {
       formattedDate = "Today";
@@ -148,20 +135,60 @@ const addTodos = () => {
       time: formattedDate,
       active: true,
     };
-    active_todos.push(todo);
-    refreshTodos();
+    createTodo(todo);
     return true;
   }
 };
 
-addTodosBtn.addEventListener("click", () => {
-  if (addTodos() === true) {
+addTodoBtn.addEventListener("click", () => {
+  if (addTodo() === true) {
     if (!modal.classList.contains("hidden")) {
       modal.classList.add("hidden");
       overlay.classList.add("hidden");
     }
   }
-  // refreshTodos();
 });
 
 document.querySelector(".cross-icon").addEventListener("click", hideModal);
+
+active_todo_list.addEventListener("click", (event) => {
+  const element = event.target;
+  if (element.checked === true) {
+    element.parentNode.classList.add("completed");
+    if (active_todo_list.children.length === 0) {
+      if (!upcomingTodosStatusText.classList.contains("hidden")) {
+        upcomingTodosStatusText.classList.add("hidden");
+      }
+    }
+  }
+  if (element.checked === false) {
+    element.parentNode.classList.remove("completed");
+  }
+  if (element.id === "clear_todo") {
+    if (element.parentNode.parentNode.parentNode.children.length <= 1) {
+      if (upcomingTodosStatusText.classList.contains("hidden")) {
+        upcomingTodosStatusText.animate(
+          [
+            {
+              color: "white",
+            },
+            {
+              color: "black",
+            },
+          ],
+          {
+            duration: 500,
+          }
+        );
+        upcomingTodosStatusText.classList.remove("hidden");
+      }
+    }
+    element.parentNode.parentNode.animate(
+      [{ from: "scale(1)" }, { transform: "scale(0)" }],
+      { duration: 399 }
+    );
+    setTimeout(() => {
+      active_todo_list.removeChild(element.parentNode.parentNode);
+    }, 400);
+  }
+});
