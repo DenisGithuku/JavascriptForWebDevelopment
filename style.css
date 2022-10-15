@@ -1,0 +1,101 @@
+:root {
+    --small-border-radius: 4px;
+    --medium-border-radius: 8px;
+    --large-border-radius: 16px;
+    --primary-color: rgb(202, 231, 235);
+    --secondary-color: rgb(247, 255, 244);
+    --tertiary-color: yellow;
+    --background-color:  white;
+    --btn-size: 60px;
+    --surface-color: white;
+    --small-gap: 0.5em;
+    --medium-gap: 1em;
+    --large-gap: 2em;
+    --primary-variant: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+    --on-primary: white;
+    --box-shadow: 20px 10px 20px rgba(0,0,0, 0.084);
+    --standard-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+* {
+    box-sizing: border-box; 
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: var(--standard-font-family);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center ;
+    height: 100%;
+    background: var(--primary-variant);
+}
+
+.card {
+    background-color: var(--background-color);
+    border-radius: var(--large-border-radius);
+    box-shadow: var(--box-shadow);
+    gap: var(--large-gap);
+    border-radius: var(--large-border-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+}
+
+
+.result {
+    align-self: flex-end;
+    /* margin: var(--small-gap); */
+    padding: var(--large-gap);
+    text-align: end;
+    outline: none;
+    border: none
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    gap: var(--large-gap);
+}
+
+.is-pressed {
+    background: var(--primary-color);
+}
+
+
+
+.calculator-btns {
+    display: grid;
+    grid-template-columns: var(--btn-size) var(--btn-size) var(--btn-size) var(--btn-size);
+    grid-template-rows: var(--btn-size) var(--btn-size) var(--btn-size) var(--btn-size) var(--btn-size);
+    gap: var(--small-gap);
+    
+}
+
+
+
+.calculator-btn {
+    border: none;
+    border-radius: var(--large-border-radius);
+}
+
+#clear-btn {
+    grid-row-start: 4;
+    grid-row-end: 6;
+}
+
+
+#equals-btn {
+    grid-column-start: 3;
+    grid-column-end: 5;
+}
