@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10em;
+    padding: 4em;
+    align-items: center;
+}
+.text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10em;
+}
+.text-box {
+    padding: 4em;
+}
+
+.text-box:first-child {
+    background-color: aliceblue;
+}
+
+.text-box:nth-child(2) {
+    background-color: antiquewhite;
+}
+.text-box:last-child {
+    background-color: burlywood;
+}
+.reveal {
+    position: relative;
+    transform: translateY(150px);
+    opacity: 0;
+    transition: all 1s ease;
+}
+
+.reveal.active {
+    transform: translateY(0);
+    opacity: 1;
+}
