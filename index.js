@@ -18,4 +18,5 @@ function reveal() {
 
 window.addEventListener('scroll', reveal)
 
+// checks the scroll on page load
 reveal()
