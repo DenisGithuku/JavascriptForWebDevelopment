@@ -43,12 +43,36 @@ class TodoScreen extends Component {
         completed: false,
         time: new Date().toLocaleTimeString(),
       },
+      message_card: {
+        visible: false,
+        message: "",
+      },
     };
     this.onToggleDialog = this.onToggleDialog.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
     this.onAddNewTodo = this.onAddNewTodo.bind(this);
     this.onToggleComplete = this.onToggleComplete.bind(this);
+    this.onShowMessageCard = this.onShowMessageCard.bind(this);
+    this.onHideMessageCard = this.onHideMessageCard.bind(this);
+  }
+
+  onShowMessageCard(message) {
+    this.setState({
+      message_card: {
+        visible: true,
+        message: message,
+      },
+    });
+  }
+
+  onHideMessageCard() {
+    this.setState({
+      message_card: {
+        visible: false,
+        message: "",
+      },
+    });
   }
 
   onToggleDialog() {
@@ -69,9 +93,14 @@ class TodoScreen extends Component {
   onDeleteTodo(id) {
     this.setState({
       todos: this.state.todos.filter((todo) => {
-        return todo.id !== id
-      })
-    })
+        return todo.id !== id;
+      }),
+    });
+    this.onShowMessageCard("Task deleted successfully");
+
+    setTimeout(() => {
+      this.onHideMessageCard();
+    }, 5000);
   }
 
   onAddNewTodo(event) {
@@ -79,11 +108,17 @@ class TodoScreen extends Component {
       this.state.new_task.title.length === 0 ||
       this.state.new_task.description.length === 0
     ) {
-      alert("Invalid details");
+      this.onShowMessageCard("Invalid task details");
+
+      setTimeout(() => {
+        this.onHideMessageCard();
+      }, 5000);
       return;
     }
 
-    const updatedList = this.state.todos.concat({ ...this.state.new_task });
+    const newTodo = this.state.new_task;
+    newTodo.id = this.state.todos.length + 1;
+    const updatedList = this.state.todos.concat({ ...newTodo });
     this.setState({
       todos: updatedList,
       new_task: {
@@ -95,6 +130,12 @@ class TodoScreen extends Component {
       },
       dialog_visible: !this.state.dialog_visible,
     });
+
+    this.onShowMessageCard("Task added successfully");
+
+    setTimeout(() => {
+      this.onHideMessageCard();
+    }, 5000);
   }
 
   onTitleChange(event) {
@@ -120,18 +161,27 @@ class TodoScreen extends Component {
         <li key={todo.id}>
           <TodoItem
             todo={todo}
-            onDeleteTodo = {() => this.onDeleteTodo(todo.id)}
+            onDeleteTodo={() => this.onDeleteTodo(todo.id)}
             onToggleComplete={() => this.onToggleComplete(todo.id)}
           />
         </li>
       );
     });
 
-    const Content = (this.state.todos.length === 0) ? <h1 className="no-todo-status">No todos available. Hurray 🥳</h1> : <ul className = "todo-list">{TodoList}</ul>
+    const Content =
+      this.state.todos.length === 0 ? (
+        <h1 className="no-todo-status">No todos available. Hurray 🥳</h1>
+      ) : (
+        <ul className="todo-list">{TodoList}</ul>
+      );
 
     const dialog_status = this.state.dialog_visible ? "visible" : "hidden";
+    const message_card_status = this.state.message_card.visible ? "visible" : "hidden"
     return (
       <div className="todo-screen">
+        <div className={`message-card ${message_card_status}`}>
+          <span>{this.state.message_card.message}</span>
+        </div>
         <button className="add-todo-btn btn" onClick={this.onToggleDialog}>
           Add new todo
         </button>

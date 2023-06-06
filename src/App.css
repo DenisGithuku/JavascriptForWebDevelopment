@@ -150,3 +150,26 @@ input[type="checkbox"] {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.message-card {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  animation: slideDown .4s;
+  padding: 1.5em;
+  background-color: rgba(173, 216, 230, 0.25);
+  color: red;
+  font-size: 1.2rem;
+  box-shadow: 0px 0px 10rem rgba(255, 182, 193, 0.25);
+  border-radius: 16px;
+}
+
+@keyframes slideDown {
+  from {
+    top: -20px;
+  }
+  to {
+    top: 10px;
+  }
+}
