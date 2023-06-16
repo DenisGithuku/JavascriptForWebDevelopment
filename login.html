@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        <h2 class="form-title">Welcome Back</h2>
+        <form>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" name="email" id="email" />
+            <small class="email-entry"></small>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" />
+            <small class="password-entry"></small>
+          </div>
+          <div class="form-footer">
+            <div class="form-check">
+              <input type="checkbox" name="preference" id="preference" />
+              <label for="preference">Stay logged in</label>
+            </div>
+            <p><a href="register.html"> create account </a>instead</p>
+          </div>
+          <a href="password-reset.html" class="password-reset-link"
+            >Forgot password</a
+          >
+          <span class="social-login">Or log in with</span>
+            <div class="socials">
+              <img class="social-icon google-logo" width="40" height="40" src="https://img.icons8.com/fluency/48/google-logo.png" alt="google-logo"/>
+              <img class="social-icon facebook-logo" width="40" height="40" src="https://img.icons8.com/color/48/facebook-new.png" alt="facebook-new"/>
+              <img class="social-icon github-logo" width="40" height="40" src="https://img.icons8.com/ios-filled/50/github.png" alt="github"/>
+            </div>
+          <input type="submit" value="Complete" />
+        </form>
+      </div>
+    </div>
+    <div class="alert-card hidden">
+      <span class="alert">Message</span>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+    
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDcZ6uhRPkGz95PZsmJ61ZiSvx1YcwEhWs",
+        authDomain: "js-firebase-db967.firebaseapp.com",
+        projectId: "js-firebase-db967",
+        storageBucket: "js-firebase-db967.appspot.com",
+        messagingSenderId: "1006497506790",
+        appId: "1:1006497506790:web:ee70fc8db118e34a876227",
+        measurementId: "G-S0FWMZE7TM",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="login.js"></script>
+  </body>
+</html>

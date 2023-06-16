@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form>
+      <div class="form-control">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" />
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" />
+      </div>
+      <input type="submit" value="Register" />
+    </form>
+    <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+    // Add Firebase products that you want to use
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDcZ6uhRPkGz95PZsmJ61ZiSvx1YcwEhWs",
+        authDomain: "js-firebase-db967.firebaseapp.com",
+        projectId: "js-firebase-db967",
+        storageBucket: "js-firebase-db967.appspot.com",
+        messagingSenderId: "1006497506790",
+        appId: "1:1006497506790:web:ee70fc8db118e34a876227",
+        measurementId: "G-S0FWMZE7TM",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script src="index.js"></script>
+  </body>
+</html>
