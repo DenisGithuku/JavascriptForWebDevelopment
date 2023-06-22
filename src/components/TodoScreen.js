@@ -1,40 +1,13 @@
 import { Component } from "react";
 import TodoItem from "./TodoItem";
+import db from "../util/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 class TodoScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [
-        {
-          id: 1,
-          title: "Go to the market",
-          description: "Buy some foodstuff",
-          completed: false,
-          time: new Date().toLocaleTimeString(),
-        },
-        {
-          id: 2,
-          title: "Got to the gym",
-          description: "Work out for 30 minutes",
-          completed: true,
-          time: new Date().toLocaleTimeString(),
-        },
-        {
-          id: 3,
-          title: "Watch a movie",
-          description: "The Lost Boy",
-          completed: false,
-          time: new Date().toLocaleTimeString(),
-        },
-        {
-          id: 4,
-          title: "Test todo",
-          description: "Just a testing description",
-          completed: true,
-          time: new Date().toLocaleTimeString(),
-        },
-      ],
+      todos: [],
       dialog_visible: false,
       new_task: {
         id: "",
@@ -48,6 +21,8 @@ class TodoScreen extends Component {
         message: "",
       },
     };
+
+    this.getTodos()
     this.onToggleDialog = this.onToggleDialog.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
@@ -55,6 +30,29 @@ class TodoScreen extends Component {
     this.onToggleComplete = this.onToggleComplete.bind(this);
     this.onShowMessageCard = this.onShowMessageCard.bind(this);
     this.onHideMessageCard = this.onHideMessageCard.bind(this);
+    this.getTodos = this.getTodos.bind(this);
+  }
+
+ 
+
+  async getTodos() {
+    try {
+      const todosSnapshot = await getDocs(collection(db, "todos"));
+      const newTodos = [ ...this.state.todos ]
+      todosSnapshot.docs.forEach((doc) => {
+        newTodos.push(doc.data())
+      });
+      this.setState({
+        todos: newTodos
+      })
+      
+    } catch (err) {
+      this.onShowMessageCard(err.message);
+
+      setTimeout(() => {
+        this.onHideMessageCard();
+      }, 5000);
+    }
   }
 
   onShowMessageCard(message) {
@@ -170,15 +168,20 @@ class TodoScreen extends Component {
 
     const Content =
       this.state.todos.length === 0 ? (
-        <h1 className="no-todo-status">No todos available. Hurray 🥳</h1>
+        <h1 className="no-todo-status">
+          No todos available. Hurray you're done for today. 🥳
+        </h1>
       ) : (
         <ul className="todo-list">{TodoList}</ul>
       );
 
     const dialog_status = this.state.dialog_visible ? "visible" : "hidden";
-    const message_card_status = this.state.message_card.visible ? "visible" : "hidden"
+    const message_card_status = this.state.message_card.visible
+      ? "visible"
+      : "hidden";
+    const scroll_status = this.state.dialog_visible ? "no-scroll" : "";
     return (
-      <div className="todo-screen">
+      <div className={`${scroll_status} todo-screen`}>
         <div className={`message-card ${message_card_status}`}>
           <span>{this.state.message_card.message}</span>
         </div>

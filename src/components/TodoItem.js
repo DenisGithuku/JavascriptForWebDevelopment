@@ -10,7 +10,7 @@ function TodoItem({ todo, onToggleComplete, onDeleteTodo }) {
         <div className="todo-content">
           <h3>{todo.title}</h3>
           <span>{todo.description}</span>
-          <span>{todo.time}</span>
+          {/* <span>{todo.time}</span> */}
         </div>
       </div>
       <input
