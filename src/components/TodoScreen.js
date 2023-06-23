@@ -1,7 +1,14 @@
 import { Component } from "react";
 import TodoItem from "./TodoItem";
 import db from "../util/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 
 class TodoScreen extends Component {
   constructor(props) {
@@ -10,11 +17,10 @@ class TodoScreen extends Component {
       todos: [],
       dialog_visible: false,
       new_task: {
-        id: "",
         title: "",
         description: "",
         completed: false,
-        time: new Date().toLocaleTimeString(),
+        time: new Date().getUTCMilliseconds(),
       },
       message_card: {
         visible: false,
@@ -22,7 +28,6 @@ class TodoScreen extends Component {
       },
     };
 
-    this.getTodos()
     this.onToggleDialog = this.onToggleDialog.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
@@ -33,19 +38,21 @@ class TodoScreen extends Component {
     this.getTodos = this.getTodos.bind(this);
   }
 
- 
+  async componentDidMount() {
+    await this.getTodos();
+  }
 
   async getTodos() {
     try {
       const todosSnapshot = await getDocs(collection(db, "todos"));
-      const newTodos = [ ...this.state.todos ]
+      const newTodos = [];
       todosSnapshot.docs.forEach((doc) => {
-        newTodos.push(doc.data())
+        const todo = { ...doc.data(), id: doc.id };
+        newTodos.push(todo);
       });
       this.setState({
-        todos: newTodos
-      })
-      
+        todos: newTodos,
+      });
     } catch (err) {
       this.onShowMessageCard(err.message);
 
@@ -79,61 +86,90 @@ class TodoScreen extends Component {
     });
   }
 
-  onToggleComplete(id) {
-    this.setState({
-      todos: this.state.todos.map((todo) => {
-        if (todo.id === id) todo.completed = !todo.completed;
-        return todo;
-      }),
-    });
-  }
-
-  onDeleteTodo(id) {
-    this.setState({
-      todos: this.state.todos.filter((todo) => {
-        return todo.id !== id;
-      }),
-    });
-    this.onShowMessageCard("Task deleted successfully");
-
-    setTimeout(() => {
-      this.onHideMessageCard();
-    }, 5000);
-  }
-
-  onAddNewTodo(event) {
-    if (
-      this.state.new_task.title.length === 0 ||
-      this.state.new_task.description.length === 0
-    ) {
-      this.onShowMessageCard("Invalid task details");
+  async onToggleComplete(id) {
+    try {
+      const todo = this.state.todos.find((todo) => todo.id === id);
+      todo.completed = !todo.completed;
+      await updateDoc(doc(db, "todos", id), {
+        completed: todo.completed,
+        description: todo.description,
+        time: todo.time,
+        title: todo.title,
+      });
+      await this.getTodos();
+    } catch (err) {
+      this.onShowMessageCard(err.message);
 
       setTimeout(() => {
         this.onHideMessageCard();
       }, 5000);
-      return;
     }
+  }
 
-    const newTodo = this.state.new_task;
-    newTodo.id = this.state.todos.length + 1;
-    const updatedList = this.state.todos.concat({ ...newTodo });
-    this.setState({
-      todos: updatedList,
-      new_task: {
-        id: "",
-        title: "",
-        description: "",
-        completed: false,
-        time: new Date().toLocaleTimeString(),
-      },
-      dialog_visible: !this.state.dialog_visible,
-    });
+  async onDeleteTodo(id) {
+    try {
+      await deleteDoc(doc(db, "todos", id));
+      this.onShowMessageCard("Task deleted successfully");
 
-    this.onShowMessageCard("Task added successfully");
+      setTimeout(() => {
+        this.onHideMessageCard();
+      }, 5000);
 
-    setTimeout(() => {
-      this.onHideMessageCard();
-    }, 5000);
+      setTimeout(() => {
+        this.onHideMessageCard();
+      }, 5000);
+      await this.getTodos();
+    } catch (err) {
+      this.onShowMessageCard(err.message);
+
+      setTimeout(() => {
+        this.onHideMessageCard();
+      }, 5000);
+    }
+  }
+
+  async onAddNewTodo(event) {
+    try {
+      if (
+        this.state.new_task.title.length === 0 ||
+        this.state.new_task.description.length === 0
+      ) {
+        this.onShowMessageCard("Invalid task details");
+
+        setTimeout(() => {
+          this.onHideMessageCard();
+        }, 5000);
+        return;
+      }
+      // add new todo to the firestore db
+      await addDoc(collection(db, "todos"), this.state.new_task);
+      // const newTodo = this.state.new_task;
+      // newTodo.id = this.state.todos.length + 1;
+      // const updatedList = this.state.todos.concat({ ...newTodo });
+      this.setState({
+        new_task: {
+          id: "",
+          title: "",
+          description: "",
+          completed: false,
+          time: new Date().getUTCMilliseconds(),
+        },
+        dialog_visible: !this.state.dialog_visible,
+      });
+
+      this.onShowMessageCard("Task added successfully");
+
+      setTimeout(() => {
+        this.onHideMessageCard();
+      }, 5000);
+      await this.getTodos();
+    } catch (err) {
+      this.onShowMessageCard(err.message);
+
+      setTimeout(() => {
+        this.onHideMessageCard();
+      }, 5000);
+    }
   }
 
   onTitleChange(event) {
