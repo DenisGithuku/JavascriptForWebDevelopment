@@ -140,13 +140,24 @@ body {
   outline: 3px solid rgba(100, 148, 237, 0.1);
 }
 
-.submit-btn {
-  padding: 1em 2em;
+.submit-btn, .cancel-btn {
+  padding: .5em 1em;
   border-radius: 32px;
   border: none;
   font-size: 1.2rem;
-  background: linear-gradient(to right, rgba(100, 148, 237, 0.25), rgba(255, 182, 193, 0.25));
+  color: white;
+  margin-right: .5em;
 }
+
+.submit-btn {
+  background: #167DFF;
+}
+
+.cancel-btn {
+  background-color: red;
+}
+
+
 
 input[type="checkbox"] {
   height: 25px;
@@ -196,5 +207,37 @@ input[type="checkbox"] {
   }
   to {
     top: 10px;
+  }
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 4px solid gainsboro;
+  border-top: 4px solid gray;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

@@ -15,12 +15,13 @@ class TodoScreen extends Component {
     super(props);
     this.state = {
       todos: [],
+      loading: false,
       dialog_visible: false,
       new_task: {
         title: "",
         description: "",
         completed: false,
-        time: new Date().getUTCMilliseconds(),
+        time: "",
       },
       message_card: {
         visible: false,
@@ -36,6 +37,7 @@ class TodoScreen extends Component {
     this.onShowMessageCard = this.onShowMessageCard.bind(this);
     this.onHideMessageCard = this.onHideMessageCard.bind(this);
     this.getTodos = this.getTodos.bind(this);
+    this.onTimeChange = this.onTimeChange.bind(this)
   }
 
   async componentDidMount() {
@@ -44,6 +46,9 @@ class TodoScreen extends Component {
 
   async getTodos() {
     try {
+      this.setState({
+        loading: true,
+      });
       const todosSnapshot = await getDocs(collection(db, "todos"));
       const newTodos = [];
       todosSnapshot.docs.forEach((doc) => {
@@ -52,6 +57,7 @@ class TodoScreen extends Component {
       });
       this.setState({
         todos: newTodos,
+        loading: false,
       });
     } catch (err) {
       this.onShowMessageCard(err.message);
@@ -115,9 +121,6 @@ class TodoScreen extends Component {
         this.onHideMessageCard();
       }, 5000);
 
-      setTimeout(() => {
-        this.onHideMessageCard();
-      }, 5000);
       await this.getTodos();
     } catch (err) {
       this.onShowMessageCard(err.message);
@@ -152,7 +155,7 @@ class TodoScreen extends Component {
           title: "",
           description: "",
           completed: false,
-          time: new Date().getUTCMilliseconds(),
+          time: "",
         },
         dialog_visible: !this.state.dialog_visible,
       });
@@ -188,6 +191,14 @@ class TodoScreen extends Component {
     });
   }
 
+  onTimeChange(event) {
+    let new_task = this.state.new_task
+    new_task.time = event.target.value
+    this.setState({
+      new_task: new_task
+    })
+  }
+
   render() {
     // map method - transform todo objects into todo jsx elements
     const TodoList = this.state.todos.map((todo) => {
@@ -216,39 +227,60 @@ class TodoScreen extends Component {
       ? "visible"
       : "hidden";
     const scroll_status = this.state.dialog_visible ? "no-scroll" : "";
+    const loading_status = !this.state.loading ? "hidden" : "";
     return (
-      <div className={`${scroll_status} todo-screen`}>
-        <div className={`message-card ${message_card_status}`}>
-          <span>{this.state.message_card.message}</span>
-        </div>
-        <button className="add-todo-btn btn" onClick={this.onToggleDialog}>
-          Add new todo
-        </button>
-        {Content}
-        <div className={`dialog ${dialog_status}`}>
-          <div className="input-field">
-            <label htmlFor="title">Title</label>
-            <input
-              type="text"
-              id="title"
-              value={this.state.new_task.title}
-              onChange={this.onTitleChange}
-            />
+      <>
+        <div className={`${scroll_status} todo-screen`}>
+          <div className={`message-card ${message_card_status}`}>
+            <span>{this.state.message_card.message}</span>
           </div>
-          <div className="input-field">
-            <label htmlFor="description">Description</label>
-            <input
-              type="text"
-              id="description"
-              value={this.state.new_task.description}
-              onChange={this.onDescriptionChange}
-            />
-          </div>
-          <button className="submit-btn btn" onClick={this.onAddNewTodo}>
-            Create
+          <button className="add-todo-btn btn" onClick={this.onToggleDialog}>
+            Add new todo
           </button>
+          {Content}
+          <div className={`dialog ${dialog_status}`}>
+            <div className="input-field">
+              <label htmlFor="title">Title</label>
+              <input
+                type="text"
+                id="title"
+                value={this.state.new_task.title}
+                onChange={this.onTitleChange}
+              />
+            </div>
+            <div className="input-field">
+              <label htmlFor="description">Description</label>
+              <input
+                type="text"
+                id="description"
+                value={this.state.new_task.description}
+                onChange={this.onDescriptionChange}
+              />
+            </div>
+            <div className="input-field">
+              <label htmlFor="time">Time</label>
+              <input
+                type="datetime-local"
+                id="time"
+                value={this.state.new_task.time}
+                onChange={this.onTimeChange}
+              />
+            </div>
+            <div className="dialog-btns">
+              <button className="submit-btn btn" onClick={this.onAddNewTodo}>
+                Create
+              </button>
+              <button className="cancel-btn btn" onClick={this.onToggleDialog}>
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+        <div className={`loading-overlay ${loading_status}`}>
+          <div className="loader"></div>
+          <span>Fetching todos ...</span>
+        </div>
+      </>
     );
   }
 }
